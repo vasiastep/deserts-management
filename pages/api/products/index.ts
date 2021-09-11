@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import connectDB from '../../../api/database/connectDB';
 import Product from '../../../api/modules/products/product.model';
-import User from '../../../api/modules/user/user.model';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
@@ -13,13 +12,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case 'GET':
       try {
         const products = await Product.find({});
-
-        await User.create({
-          name: 'Oksana Stepanova',
-          email: 'stepanovaoksana@gmail.com',
-          password:
-            '$2a$10$tl5Pq4FTkkgnDLG8JD.ZmeCh5J29dgcbRzJlaC8CQu8iFmXLxm97W',
-        });
 
         res.status(200).json({ success: true, data: products });
       } catch (error) {
