@@ -1,0 +1,14 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:4.4
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db
+
+  start_dependencies:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - mongo
+    command: mongo:27017

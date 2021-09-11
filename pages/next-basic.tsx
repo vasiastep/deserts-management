@@ -11,7 +11,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       const res = await fetch(
-        'https://jsonplaceholder.typicode.com/todos?_limit=50'
+        'https://jsonplaceholder.typicode.com/todos?_limit=50',
       ).then((response) => response.json());
 
       setTodos(res);
