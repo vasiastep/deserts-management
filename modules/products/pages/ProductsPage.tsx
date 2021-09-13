@@ -1,4 +1,5 @@
 import { Table, Button } from 'antd';
+import ifetch from 'isomorphic-unfetch';
 import Link from 'next/link';
 import React from 'react';
 
@@ -44,7 +45,7 @@ const ProductsPage = ({ products }: ProductsPageProps) => {
 };
 
 ProductsPage.getInitialProps = async () => {
-  const result = await fetch(
+  const result = await ifetch(
     `${process.env.NEXT_PUBLIC_URL}/api/products`,
   ).then((res) => res.json());
 
