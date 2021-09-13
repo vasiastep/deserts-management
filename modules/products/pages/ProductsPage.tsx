@@ -1,31 +1,54 @@
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
+import Link from 'next/link';
 import React from 'react';
 
+import { ProductModel } from '../../../api/modules/products/product.model';
 import NavMenu from '../../../shared-components/NavMenu';
 
-const mockData = [
-  { name: 'Цукор', price: 50, key: '1' },
-  { name: 'Мигдалева мука', price: 300, key: '2' },
-];
+type ProductsPageProps = {
+  products: ProductModel[];
+};
 
-const ProductsPage = () => {
+const ProductsPage = ({ products }: ProductsPageProps) => {
+  const productsWithKeys = products.map((p) => ({
+    ...p,
+    key: p._id,
+  }));
+
   return (
     <>
       <NavMenu />
-      <Table dataSource={mockData}>
+      <Link href="/products/create" passHref>
+        <Button type="primary" style={{ margin: '10px 5px' }}>
+          + Додати новий продукт
+        </Button>
+      </Link>
+      <Table dataSource={productsWithKeys}>
         <Table.Column
           key="name"
           title="Продукт"
-          render={(product: any) => product.name}
+          render={(product: ProductModel) => (
+            <Link href={`/products/${product._id}`}>
+              <a>{product.name}</a>
+            </Link>
+          )}
         />
         <Table.Column
           key="price"
           title="Ціна за кг"
-          render={(product: any) => `${product.price} грн`}
+          render={(product: ProductModel) => `${product.price} грн`}
         />
       </Table>
     </>
   );
+};
+
+ProductsPage.getInitialProps = async () => {
+  const result = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/products`,
+  ).then((res) => res.json());
+
+  return { products: result.data };
 };
 
 export default ProductsPage;

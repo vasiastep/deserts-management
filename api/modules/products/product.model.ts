@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 
-export interface ProductModel extends mongoose.Document {
+export type ProductModel = {
+  _id: string;
   name: string;
   price: number;
-}
+};
 
 const ProductSchema = new mongoose.Schema(
   {

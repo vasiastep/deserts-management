@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { setCookie } from 'nookies';
 
+import { fetchAPI } from '../../../services/fetch.service';
+
 type AuthFormValues = {
   email: string;
   password: string;
@@ -20,16 +22,7 @@ const AuthPage = () => {
   };
 
   const authenticate = async (values: AuthFormValues) => {
-    const contentType = 'application/json';
-
-    const result = await fetch('/api/auth', {
-      method: 'POST',
-      headers: {
-        Accept: contentType,
-        'Content-Type': contentType,
-      },
-      body: JSON.stringify(values),
-    }).then((res) => res.json());
+    const result = await fetchAPI('/auth', 'POST', values);
 
     if (!result.success) {
       toast.error('Дані невірні, спробуйте ще раз');

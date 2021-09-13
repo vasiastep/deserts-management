@@ -1,30 +1,33 @@
-import { InputNumber, Input, Button } from 'antd';
-import ifetch from 'isomorphic-unfetch';
+import { Input, InputNumber, Button } from 'antd';
 import Router from 'next/router';
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { ProductModel } from '../../../api/modules/products/product.model';
-import { fetchAPI } from '../../../services/fetch.service';
 import NavMenu from '../../../shared-components/NavMenu';
+import { fetchAPI } from '../../../services/fetch.service';
 
-type ProductDetailsPageProps = {
-  product?: ProductModel;
+type ProductFormValues = {
+  name: string;
+  price: number;
 };
 
-const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
+const CreateProductPage = () => {
   const { control, handleSubmit } = useForm();
 
-  const handleCreateProduct = async (values: any) => {
-    const res = await fetchAPI(`/products/${product?._id}`, 'PUT', values);
+  const handleCreateProduct = async (values: ProductFormValues) => {
+    const res = await fetchAPI('/products/create', 'POST', values);
+
+    if (!res.success && res.message === 'Already exists') {
+      return toast.error("Продукт з таким ім'ям вже існує");
+    }
 
     if (!res.success) {
       return toast.error('Щось пішло не так');
     }
 
-    toast.success(`Інформацію про "${values.name}" було оновлено`);
+    toast.success(`${values.name} було додано до списку продуктів`);
     Router.push('/products');
   };
 
@@ -32,14 +35,13 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
     <>
       <NavMenu />
       <Wrapper>
-        <Title>Оновити продукт</Title>
+        <Title>Створити новий продукт</Title>
         <form onSubmit={handleSubmit(handleCreateProduct)}>
           <InputLabel>Назва продукта</InputLabel>
           <Controller
             control={control}
             name="name"
             rules={{ required: true }}
-            defaultValue={product?.name}
             render={({ field }) => (
               <StyledInput {...field} placeholder="Наприклад: Цукор" />
             )}
@@ -49,7 +51,7 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
           <Controller
             control={control}
             name="price"
-            defaultValue={product?.price}
+            defaultValue={0}
             rules={{ required: true }}
             render={({ field }) => <InputNumber {...field} />}
           />
@@ -63,14 +65,6 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
       </Wrapper>
     </>
   );
-};
-
-ProductDetailsPage.getInitialProps = async (ctx: any) => {
-  const result = await ifetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/products/${ctx.query.id}`,
-  ).then((res) => res.json());
-
-  return { product: result.data };
 };
 
 const Wrapper = styled.div`
@@ -90,4 +84,4 @@ const StyledInput = styled(Input)`
   margin-bottom: 10px;
 `;
 
-export default ProductDetailsPage;
+export default CreateProductPage;

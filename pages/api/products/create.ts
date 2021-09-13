@@ -9,17 +9,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await connectDB();
 
   switch (method) {
-    case 'GET':
+    case 'POST':
       try {
-        const products = await Product.find({});
+        const data = req.body;
 
-        res.status(200).json({ success: true, data: products });
+        const product = await Product.findOne({ name: data.name });
+
+        if (product) {
+          return res
+            .status(400)
+            .json({ success: false, message: 'Already exists' });
+        }
+
+        const newProduct = await Product.create(data);
+
+        res.status(201).json({ success: true, data: { name: newProduct } });
       } catch (error) {
-        console.log(error);
-
         res.status(400).json({ success: false });
       }
       break;
+
     default:
       res.status(400).json({ success: false });
       break;

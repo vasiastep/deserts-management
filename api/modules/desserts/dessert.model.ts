@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
-export interface DessertProduct extends mongoose.Document {
+export type DessertProduct = {
   productId: string;
   productName: string;
   productAmount: number;
   productPrice: number;
-}
+};
 
 export type DessertModel = {
   name: string;
@@ -27,10 +27,8 @@ const DessertSchema = new mongoose.Schema(
       type: [
         {
           _id: false,
-          productId: { type: String },
-          productName: { type: String },
+          product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
           productAmount: { type: Number },
-          productPrice: { type: Number },
         },
       ],
       default: [],
