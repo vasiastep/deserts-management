@@ -17,8 +17,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         res.status(200).json({ success: true, data: desserts });
       } catch (error) {
-        console.log(error);
-
         res.status(400).json({ success: false });
       }
       break;

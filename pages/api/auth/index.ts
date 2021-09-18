@@ -13,15 +13,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         const { email, password } = req.body;
 
-        console.log(email);
-        console.log(password);
-
         const authData = await AuthController.authUserViaPassword(
           email,
           password,
         );
-
-        console.log(authData);
 
         res.status(200).json({ success: true, data: authData });
       } catch (error) {

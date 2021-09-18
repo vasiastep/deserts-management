@@ -1,6 +1,6 @@
 import { InputNumber, Input, Button } from 'antd';
-import Router from 'next/router';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -13,8 +13,24 @@ type ProductDetailsPageProps = {
   product?: ProductModel;
 };
 
-const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
-  const { control, handleSubmit } = useForm();
+const ProductDetailsPage = ({}: ProductDetailsPageProps) => {
+  const router = useRouter();
+  const { control, handleSubmit, setValue } = useForm();
+  const [product, setProduct] = useState<ProductModel | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const fetchForProduct = async () => {
+        const res = await fetchAPI(`/products/${router.query.id}`, 'GET');
+
+        setProduct(res.data);
+        setValue('name', res.data.name);
+        setValue('price', res.data.price);
+      };
+
+      fetchForProduct();
+    }
+  }, []);
 
   const handleUpdateProduct = async (values: any) => {
     const res = await fetchAPI(`/products/${product?._id}`, 'PUT', values);
@@ -24,7 +40,7 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
     }
 
     toast.success(`Інформацію про "${values.name}" було оновлено`);
-    Router.push('/products');
+    router.push('/products');
   };
 
   return (
@@ -62,18 +78,6 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
       </Wrapper>
     </>
   );
-};
-
-ProductDetailsPage.getInitialProps = async (ctx: any) => {
-  console.log(ctx.query.id);
-
-  const result = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/products/${ctx.query.id}`,
-  ).then((res) => res.json());
-
-  console.log(result);
-
-  return { product: result.data };
 };
 
 const Wrapper = styled.div`
