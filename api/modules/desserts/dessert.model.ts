@@ -1,16 +1,18 @@
 import mongoose from 'mongoose';
 
+import { ProductModel } from '../products/product.model';
+
 export type DessertProduct = {
-  productId: string;
-  productName: string;
-  productAmount: number;
-  productPrice: number;
+  product: string | ProductModel;
+  quantity: number;
 };
 
 export type DessertModel = {
+  _id: string;
   name: string;
-  price: number;
-  products: string;
+  products: DessertProduct[];
+  utilitiesPercent: number;
+  profitPercent: number;
 };
 
 const DessertSchema = new mongoose.Schema(
@@ -19,19 +21,23 @@ const DessertSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
     products: {
       type: [
         {
           _id: false,
           product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-          productAmount: { type: Number },
+          quantity: { type: Number },
         },
       ],
       default: [],
+    },
+    utilitiesPercent: {
+      type: Number,
+      default: 0,
+    },
+    profitPercent: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true },

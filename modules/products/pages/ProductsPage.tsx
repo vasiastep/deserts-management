@@ -2,6 +2,7 @@ import { Table, Button } from 'antd';
 import ifetch from 'isomorphic-unfetch';
 import Link from 'next/link';
 import React from 'react';
+import styled from 'styled-components';
 
 import { ProductModel } from '../../../api/modules/products/product.model';
 import NavMenu from '../../../shared-components/NavMenu';
@@ -24,22 +25,24 @@ const ProductsPage = ({ products }: ProductsPageProps) => {
           + Додати новий продукт
         </Button>
       </Link>
-      <Table dataSource={productsWithKeys}>
-        <Table.Column
-          key="name"
-          title="Продукт"
-          render={(product: ProductModel) => (
-            <Link href={`/products/${product._id}`}>
-              <a>{product.name}</a>
-            </Link>
-          )}
-        />
-        <Table.Column
-          key="price"
-          title="Ціна за кг"
-          render={(product: ProductModel) => `${product.price} грн`}
-        />
-      </Table>
+      <TableWrapper>
+        <Table dataSource={productsWithKeys}>
+          <Table.Column
+            key="name"
+            title="Продукт"
+            render={(product: ProductModel) => (
+              <Link href={`/products/${product._id}`}>
+                <a>{product.name}</a>
+              </Link>
+            )}
+          />
+          <Table.Column
+            key="price"
+            title="Ціна за кг"
+            render={(product: ProductModel) => `${product.price} грн`}
+          />
+        </Table>
+      </TableWrapper>
     </>
   );
 };
@@ -51,5 +54,10 @@ ProductsPage.getInitialProps = async () => {
 
   return { products: result.data };
 };
+
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-y: auto;
+`;
 
 export default ProductsPage;

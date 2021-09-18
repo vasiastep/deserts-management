@@ -1,31 +1,111 @@
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
+import ifetch from 'isomorphic-unfetch';
+import Link from 'next/link';
 import React from 'react';
+import styled from 'styled-components';
 
+import { DessertModel } from '../../../api/modules/desserts/dessert.model';
+import { ProductModel } from '../../../api/modules/products/product.model';
 import NavMenu from '../../../shared-components/NavMenu';
 
-const mockData = [
-  { name: 'Торт "Крила Ангела"', price: 500, key: '1' },
-  { name: 'Торт "Снікерс"', price: 600, key: '2' },
-];
+type DessertsPageProps = {
+  desserts: DessertModel[];
+};
 
-const DessertsPage = () => {
+const DessertsPage = ({ desserts }: DessertsPageProps) => {
+  const dessertsWithKeys = desserts.map((d) => ({
+    ...d,
+    key: d._id,
+  }));
+
   return (
     <>
       <NavMenu />
-      <Table dataSource={mockData}>
-        <Table.Column
-          key="name"
-          title="Десерт"
-          render={(dessert: any) => dessert.name}
-        />
-        <Table.Column
-          key="price"
-          title="Ціна за кг"
-          render={(dessert: any) => `${dessert.price} грн`}
-        />
-      </Table>
+      <Link href="/desserts/create" passHref>
+        <Button type="primary" style={{ margin: '10px 5px' }}>
+          + Додати новий десерт
+        </Button>
+      </Link>
+      <TableWrapper>
+        <Table dataSource={dessertsWithKeys}>
+          <Table.Column
+            key="name"
+            title="Десерт"
+            render={(dessert: DessertModel) => (
+              <Link href={`/desserts/${dessert._id}`} passHref>
+                <a>{dessert.name}</a>
+              </Link>
+            )}
+          />
+          <Table.Column
+            key="fullPrice"
+            title="Повна ціна"
+            render={(dessert: DessertModel) => {
+              const priceForProducts = dessert.products.reduce(
+                (acc, i) =>
+                  acc + (i.product as ProductModel).price * i.quantity,
+                0,
+              );
+
+              const priceWithUtilities =
+                (priceForProducts * (100 + dessert.utilitiesPercent)) / 100;
+
+              const fullPrice = priceWithUtilities * dessert.profitPercent;
+
+              return (
+                <div style={{ width: 100 }}>{fullPrice.toFixed(1)} грн</div>
+              );
+            }}
+          />
+          <Table.Column
+            key="priceWithUtilities"
+            title="Cвітло,вода + продукти"
+            render={(dessert: DessertModel) => {
+              const priceForProducts = dessert.products.reduce(
+                (acc, i) =>
+                  acc + (i.product as ProductModel).price * i.quantity,
+                0,
+              );
+
+              const priceWithUtilities =
+                (priceForProducts * (100 + dessert.utilitiesPercent)) / 100;
+
+              return <div>{priceWithUtilities.toFixed(1)} грн</div>;
+            }}
+          />
+          <Table.Column
+            key="cost"
+            title="Собівартість"
+            render={(dessert: DessertModel) => (
+              <div>
+                {dessert.products
+                  .reduce(
+                    (acc, i) =>
+                      acc + (i.product as ProductModel).price * i.quantity,
+                    0,
+                  )
+                  .toFixed(1)}{' '}
+                грн
+              </div>
+            )}
+          />
+        </Table>
+      </TableWrapper>
     </>
   );
 };
+
+DessertsPage.getInitialProps = async () => {
+  const result = await ifetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/desserts`,
+  ).then((res) => res.json());
+
+  return { desserts: result.data };
+};
+
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-y: auto;
+`;
 
 export default DessertsPage;

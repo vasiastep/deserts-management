@@ -1,27 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { DessertModel } from '../../../api/modules/desserts/dessert.model';
 import { ProductModel } from '../../../api/modules/products/product.model';
 import NavMenu from '../../../shared-components/NavMenu';
 import DessertsForm from '../components/DessertsForm';
 
-type DessertDetailsPageProps = {
+type CreateDessertPageProps = {
   products: { productId: string; name: string }[];
-  dessert: DessertModel;
 };
 
-const DessertDetailsPage = ({ products, dessert }: DessertDetailsPageProps) => {
-  const dessertDefaultValues = {
-    name: dessert.name ?? '',
-    products: dessert.products.map((d) => ({
-      productId: (d.product as ProductModel)._id,
-      quantity: d.quantity,
-    })),
-    utilitiesPercent: dessert.utilitiesPercent ?? 0,
-    profitPercent: dessert.profitPercent ?? 0,
-  };
+const dessertDefaultValues = {
+  name: '',
+  products: [],
+  utilitiesPercent: 20,
+  profitPercent: 0,
+};
 
+const CreateDessertPage = ({ products }: CreateDessertPageProps) => {
   return (
     <>
       <NavMenu />
@@ -29,14 +24,14 @@ const DessertDetailsPage = ({ products, dessert }: DessertDetailsPageProps) => {
         <DessertsForm
           allProducts={products}
           defaultValues={dessertDefaultValues}
-          type="update"
+          type="create"
         />
       </DessertsPageWrapper>
     </>
   );
 };
 
-DessertDetailsPage.getInitialProps = async (ctx: any) => {
+CreateDessertPage.getInitialProps = async () => {
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/products`,
   ).then((res) => res.json());
@@ -46,15 +41,11 @@ DessertDetailsPage.getInitialProps = async (ctx: any) => {
     name: product.name,
   }));
 
-  const dessertData = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/desserts/${ctx.query.id}`,
-  ).then((res) => res.json());
-
-  return { products, dessert: dessertData.data };
+  return { products };
 };
 
 const DessertsPageWrapper = styled.div`
   padding: 0 10px;
 `;
 
-export default DessertDetailsPage;
+export default CreateDessertPage;

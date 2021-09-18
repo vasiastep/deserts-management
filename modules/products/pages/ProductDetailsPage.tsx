@@ -1,5 +1,4 @@
 import { InputNumber, Input, Button } from 'antd';
-import ifetch from 'isomorphic-unfetch';
 import Router from 'next/router';
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -17,7 +16,7 @@ type ProductDetailsPageProps = {
 const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
   const { control, handleSubmit } = useForm();
 
-  const handleCreateProduct = async (values: any) => {
+  const handleUpdateProduct = async (values: any) => {
     const res = await fetchAPI(`/products/${product?._id}`, 'PUT', values);
 
     if (!res.success) {
@@ -33,7 +32,7 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
       <NavMenu />
       <Wrapper>
         <Title>Оновити продукт</Title>
-        <form onSubmit={handleSubmit(handleCreateProduct)}>
+        <form onSubmit={handleSubmit(handleUpdateProduct)}>
           <InputLabel>Назва продукта</InputLabel>
           <Controller
             control={control}
@@ -54,9 +53,9 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
             render={({ field }) => <InputNumber {...field} />}
           />
 
-          <div>
+          <div style={{ marginTop: 10, marginBottom: 50 }}>
             <Button type="primary" htmlType="submit">
-              Створити
+              Оновити продукт
             </Button>
           </div>
         </form>
@@ -66,9 +65,13 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
 };
 
 ProductDetailsPage.getInitialProps = async (ctx: any) => {
-  const result = await ifetch(
+  console.log(ctx.query.id);
+
+  const result = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/products/${ctx.query.id}`,
   ).then((res) => res.json());
+
+  console.log(result);
 
   return { product: result.data };
 };

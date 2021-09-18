@@ -56,9 +56,9 @@ const CreateProductPage = () => {
             render={({ field }) => <InputNumber {...field} />}
           />
 
-          <div>
+          <div style={{ marginTop: 10, marginBottom: 50 }}>
             <Button type="primary" htmlType="submit">
-              Створити
+              Створити продукт
             </Button>
           </div>
         </form>

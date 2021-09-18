@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import connectDB from '../../../api/database/connectDB';
-import AuthController from '../../../api/modules/auth/auth.controller';
+import Dessert from '../../../api/modules/desserts/dessert.model';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
@@ -11,23 +11,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case 'POST':
       try {
-        const { email, password } = req.body;
+        const data = req.body;
 
-        console.log(email);
-        console.log(password);
+        const dessert = await Dessert.findOne({ name: data.name });
 
-        const authData = await AuthController.authUserViaPassword(
-          email,
-          password,
-        );
+        if (dessert) {
+          return res
+            .status(400)
+            .json({ success: false, message: 'Already exists' });
+        }
 
-        console.log(authData);
+        const newDessert = await Dessert.create(data);
 
-        res.status(200).json({ success: true, data: authData });
+        res.status(201).json({ success: true, data: newDessert });
       } catch (error) {
         res.status(400).json({ success: false });
       }
       break;
+
     default:
       res.status(400).json({ success: false });
       break;

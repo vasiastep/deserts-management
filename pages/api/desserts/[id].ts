@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import connectDB from '../../../api/database/connectDB';
-import Product from '../../../api/modules/products/product.model';
+import Dessert from '../../../api/modules/desserts/dessert.model';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -14,11 +14,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case 'GET':
       try {
-        const product = await Product.findById(id);
-        if (!product) {
+        const dessert = await Dessert.findById(id).populate('products.product');
+        if (!dessert) {
           return res.status(400).json({ success: false });
         }
-        res.status(200).json({ success: true, data: product });
+        res.status(200).json({ success: true, data: dessert });
       } catch (error) {
         res.status(400).json({ success: false });
       }
@@ -26,14 +26,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     case 'PUT':
       try {
-        const product = await Product.findByIdAndUpdate(id, req.body, {
+        const dessert = await Dessert.findByIdAndUpdate(id, req.body, {
           new: true,
           runValidators: true,
         });
-        if (!product) {
+
+        if (!dessert) {
           return res.status(400).json({ success: false });
         }
-        res.status(200).json({ success: true, data: product });
+
+        res.status(200).json({ success: true, data: dessert });
       } catch (error) {
         res.status(400).json({ success: false });
       }
@@ -41,10 +43,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     case 'DELETE':
       try {
-        const deletedProduct = await Product.deleteOne({ _id: id });
-        if (!deletedProduct) {
+        const deletedDessert = await Dessert.deleteOne({ _id: id });
+
+        if (!deletedDessert) {
           return res.status(400).json({ success: false });
         }
+
         res.status(200).json({ success: true, data: {} });
       } catch (error) {
         res.status(400).json({ success: false });
