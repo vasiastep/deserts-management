@@ -54,7 +54,7 @@ const DessertsForm = ({
 
     if (type === 'update') {
       const result = await fetchAPI(
-        `/desserts/${router.query.id}`,
+        `/desserts/update?id=${router.query.id}`,
         'PUT',
         values,
       );

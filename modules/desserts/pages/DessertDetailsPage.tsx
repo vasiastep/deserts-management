@@ -1,3 +1,4 @@
+import ifetch from 'isomorphic-unfetch';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -37,7 +38,7 @@ const DessertDetailsPage = ({ products, dessert }: DessertDetailsPageProps) => {
 };
 
 DessertDetailsPage.getInitialProps = async (ctx: any) => {
-  const result = await fetch(
+  const result = await ifetch(
     `${process.env.NEXT_PUBLIC_URL}/api/products`,
   ).then((res) => res.json());
 
@@ -46,8 +47,8 @@ DessertDetailsPage.getInitialProps = async (ctx: any) => {
     name: product.name,
   }));
 
-  const dessertData = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/desserts/${ctx.query.id}`,
+  const dessertData = await ifetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/desserts/update?id=${ctx.query.id}`,
   ).then((res) => res.json());
 
   return { products, dessert: dessertData.data };
