@@ -21,6 +21,7 @@ const DessertDetailsPage = ({ products, dessert }: DessertDetailsPageProps) => {
     })),
     utilitiesPercent: dessert.utilitiesPercent ?? 0,
     profitPercent: dessert.profitPercent ?? 0,
+    quantityFromPortion: dessert.quantityFromPortion,
   };
 
   return (

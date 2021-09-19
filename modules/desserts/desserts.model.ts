@@ -3,4 +3,5 @@ export type DessertFormValues = {
   products: { productId: string; quantity: number }[];
   utilitiesPercent: number;
   profitPercent: number;
+  quantityFromPortion?: number;
 };

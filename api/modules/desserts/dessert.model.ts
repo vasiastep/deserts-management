@@ -13,6 +13,7 @@ export type DessertModel = {
   products: DessertProduct[];
   utilitiesPercent: number;
   profitPercent: number;
+  quantityFromPortion?: number;
 };
 
 const DessertSchema = new mongoose.Schema(
@@ -38,6 +39,9 @@ const DessertSchema = new mongoose.Schema(
     profitPercent: {
       type: Number,
       default: 0,
+    },
+    quantityFromPortion: {
+      type: Number,
     },
   },
   { timestamps: true },

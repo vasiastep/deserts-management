@@ -65,6 +65,7 @@ const DessertsForm = ({
         product: p.productId,
         quantity: p.quantity,
       })),
+      quantityFromPortion: data.quantityFromPortion,
     };
 
     if (type === 'create') {
@@ -188,12 +189,21 @@ const DessertsForm = ({
       </Form.List>
 
       <Form.Item
+        name="quantityFromPortion"
+        label="К-сть штук з 1 порції (необов'язкове)"
+        initialValue={defaultValues.quantityFromPortion}
+        labelCol={{ style: { marginBottom: -10 } }}
+      >
+        <InputNumber />
+      </Form.Item>
+
+      <Form.Item
         name="utilitiesPercent"
         label="Відсоток комунальних послуг (%)"
         initialValue={defaultValues.utilitiesPercent}
         labelCol={{ style: { marginBottom: -10 } }}
       >
-        <InputNumber placeholder="Мокко" />
+        <InputNumber placeholder="20" />
       </Form.Item>
       <Form.Item
         name="profitPercent"

@@ -5,8 +5,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { DessertModel } from '../../../api/modules/desserts/dessert.model';
-import { ProductModel } from '../../../api/modules/products/product.model';
 import NavMenu from '../../../shared-components/NavMenu';
+import {
+  getFullPrice,
+  getPriceForTheItemFromPortion,
+  getPriceWithUtilities,
+  getPriceForProducts,
+} from '../desserts.utils';
 
 type DessertsPageProps = {
   desserts: DessertModel[];
@@ -57,53 +62,33 @@ const DessertsPage = ({ desserts }: DessertsPageProps) => {
           <Table.Column
             key="fullPrice"
             title="Повна ціна"
-            render={(dessert: DessertModel) => {
-              const priceForProducts = dessert.products.reduce(
-                (acc, i) =>
-                  acc + (i.product as ProductModel).price * i.quantity,
-                0,
-              );
-
-              const priceWithUtilities =
-                (priceForProducts * (100 + dessert.utilitiesPercent)) / 100;
-
-              const fullPrice = priceWithUtilities * dessert.profitPercent;
-
-              return (
-                <div style={{ width: 100 }}>{fullPrice.toFixed(1)} грн</div>
-              );
-            }}
+            render={(dessert: DessertModel) => (
+              <div style={{ width: 100 }}>
+                {getFullPrice(dessert).toFixed(1)} грн
+              </div>
+            )}
+          />
+          <Table.Column
+            key="fullPrice"
+            title="Ціна 1шт з порції"
+            render={(dessert: DessertModel) => (
+              <div style={{ width: 100 }}>
+                {getPriceForTheItemFromPortion(dessert)}
+              </div>
+            )}
           />
           <Table.Column
             key="priceWithUtilities"
             title="Cвітло,вода + продукти"
-            render={(dessert: DessertModel) => {
-              const priceForProducts = dessert.products.reduce(
-                (acc, i) =>
-                  acc + (i.product as ProductModel).price * i.quantity,
-                0,
-              );
-
-              const priceWithUtilities =
-                (priceForProducts * (100 + dessert.utilitiesPercent)) / 100;
-
-              return <div>{priceWithUtilities.toFixed(1)} грн</div>;
-            }}
+            render={(dessert: DessertModel) => (
+              <div>{getPriceWithUtilities(dessert).toFixed(1)} грн</div>
+            )}
           />
           <Table.Column
             key="cost"
             title="Собівартість"
             render={(dessert: DessertModel) => (
-              <div>
-                {dessert.products
-                  .reduce(
-                    (acc, i) =>
-                      acc + (i.product as ProductModel).price * i.quantity,
-                    0,
-                  )
-                  .toFixed(1)}{' '}
-                грн
-              </div>
+              <div>{getPriceForProducts(dessert).toFixed(1)} грн</div>
             )}
           />
         </Table>
