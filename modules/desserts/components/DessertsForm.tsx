@@ -1,11 +1,23 @@
-import { Form, Button, Select, InputNumber, Input } from 'antd';
+import { Form, Button, Select, InputNumber, Input, Modal } from 'antd';
+import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { DessertFormValues } from '../desserts.model';
 import { fetchAPI } from '../../../services/fetch.service';
+import { DessertFormValues } from '../desserts.model';
+
+const hasDuplicates = (array: string[]) => {
+  const valuesSoFar = Object.create(null);
+  for (const i of array) {
+    if (i in valuesSoFar) {
+      return i;
+    }
+    valuesSoFar[i] = true;
+  }
+  return false;
+};
 
 type FormProductData = {
   productId: string;
@@ -25,6 +37,24 @@ const DessertsForm = ({
 }: DessertsFormProps) => {
   const [form] = Form.useForm();
   const router = useRouter();
+
+  const submitWithDuplicateProductsCheck = (data: DessertFormValues) => {
+    const productIds = data.products.map((p) => p.productId);
+    const duplicate = hasDuplicates(productIds);
+
+    if (!duplicate) {
+      return submitFunction(data);
+    }
+
+    return Modal.confirm({
+      title: `Виявлено дублікат продукту - ${
+        allProducts.find((p) => p.productId === duplicate)?.name ?? ''
+      }`,
+      onOk() {
+        submitFunction(data);
+      },
+    });
+  };
 
   const submitFunction = async (data: DessertFormValues) => {
     const values = {
@@ -71,12 +101,13 @@ const DessertsForm = ({
   return (
     <Form
       form={form}
-      onFinish={(data) => submitFunction(data)}
+      onFinish={submitWithDuplicateProductsCheck}
       autoComplete="off"
     >
       <Form.Item
         name="name"
         label="Назва десерту"
+        labelCol={{ style: { marginBottom: -10 } }}
         initialValue={defaultValues.name}
       >
         <Input placeholder="Мокко" />
@@ -91,17 +122,30 @@ const DessertsForm = ({
                   {() => (
                     <Form.Item
                       {...field}
+                      labelCol={{ style: { marginBottom: -10 } }}
                       label="Продукт"
                       name={[field.name, 'productId']}
                       fieldKey={[field.fieldKey, 'productId']}
                       rules={[{ required: true, message: 'Потрібен продукт' }]}
                       style={{ marginBottom: 0 }}
                     >
-                      <Select style={{ width: 260 }}>
+                      <Select
+                        style={{ width: 260 }}
+                        showSearch
+                        filterOption={(
+                          input: string,
+                          option?: { [prop: string]: any },
+                        ) =>
+                          option?.title
+                            .toUpperCase()
+                            .indexOf(input.toUpperCase()) !== -1
+                        }
+                      >
                         {allProducts.map((item) => (
                           <Select.Option
                             key={item.productId}
                             value={item.productId}
+                            title={item.name}
                           >
                             {item.name}
                           </Select.Option>
@@ -113,6 +157,7 @@ const DessertsForm = ({
                 <Form.Item
                   {...field}
                   label="Кількість"
+                  labelCol={{ style: { marginBottom: -10, marginTop: 10 } }}
                   name={[field.name, 'quantity']}
                   fieldKey={[field.fieldKey, 'quantity']}
                   rules={[{ required: true, message: 'Потрібна кількість' }]}
@@ -121,8 +166,12 @@ const DessertsForm = ({
                   <InputNumber />
                 </Form.Item>
 
-                <RemoveProductItem onClick={() => remove(field.name)}>
-                  <Button type="ghost" danger>
+                <RemoveProductItem>
+                  <Button
+                    type="ghost"
+                    danger
+                    onClick={() => remove(field.name)}
+                  >
                     Видалити цей продукт
                   </Button>
                 </RemoveProductItem>
@@ -142,6 +191,7 @@ const DessertsForm = ({
         name="utilitiesPercent"
         label="Відсоток комунальних послуг (%)"
         initialValue={defaultValues.utilitiesPercent}
+        labelCol={{ style: { marginBottom: -10 } }}
       >
         <InputNumber placeholder="Мокко" />
       </Form.Item>
@@ -149,6 +199,7 @@ const DessertsForm = ({
         name="profitPercent"
         label="Коефіцієнт прибутку"
         initialValue={defaultValues.profitPercent}
+        labelCol={{ style: { marginBottom: -10 } }}
       >
         <InputNumber placeholder="200" />
       </Form.Item>
@@ -157,10 +208,13 @@ const DessertsForm = ({
         htmlType="button"
         type="primary"
         onClick={() => form.submit()}
-        style={{ marginBottom: 50 }}
+        style={{ marginBottom: 50, marginRight: 16 }}
       >
         {type === 'create' ? 'Створити десерт' : 'Оновити десерт'}
       </Button>
+      <Link href="/desserts">
+        <Button type="dashed">Скасувати</Button>
+      </Link>
     </Form>
   );
 };

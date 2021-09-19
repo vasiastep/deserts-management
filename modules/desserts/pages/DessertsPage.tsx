@@ -1,7 +1,7 @@
-import { Table, Button } from 'antd';
+import { Table, Button, Input } from 'antd';
 import ifetch from 'isomorphic-unfetch';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { DessertModel } from '../../../api/modules/desserts/dessert.model';
@@ -17,17 +17,34 @@ const DessertsPage = ({ desserts }: DessertsPageProps) => {
     ...d,
     key: d._id,
   }));
+  const [dessertsList, setDessertsList] = useState(dessertsWithKeys);
 
   return (
     <>
       <NavMenu />
-      <Link href="/desserts/create" passHref>
-        <Button type="primary" style={{ margin: '10px 5px' }}>
-          + Додати новий десерт
-        </Button>
-      </Link>
+      <DessertsPageHeader>
+        <FiltersWrapper>
+          <Input
+            placeholder="Пошук по назві десерту"
+            onChange={(e) =>
+              setDessertsList(
+                dessertsWithKeys.filter((des) =>
+                  des.name
+                    .toLocaleLowerCase()
+                    .includes(e.target.value.toLocaleLowerCase()),
+                ),
+              )
+            }
+          />
+        </FiltersWrapper>
+        <Link href="/desserts/create" passHref>
+          <Button type="primary" style={{ margin: '10px 5px' }}>
+            + Додати десерт
+          </Button>
+        </Link>
+      </DessertsPageHeader>
       <TableWrapper>
-        <Table dataSource={dessertsWithKeys}>
+        <Table dataSource={dessertsList}>
           <Table.Column
             key="name"
             title="Десерт"
@@ -106,6 +123,18 @@ DessertsPage.getInitialProps = async () => {
 const TableWrapper = styled.div`
   width: 100%;
   overflow-y: auto;
+`;
+
+const FiltersWrapper = styled.div`
+  width: 150px;
+  margin-left: 10px;
+`;
+
+const DessertsPageHeader = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export default DessertsPage;

@@ -1,7 +1,7 @@
-import { Table, Button } from 'antd';
+import { Table, Button, Input } from 'antd';
 import ifetch from 'isomorphic-unfetch';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { ProductModel } from '../../../api/modules/products/product.model';
@@ -16,17 +16,34 @@ const ProductsPage = ({ products }: ProductsPageProps) => {
     ...p,
     key: p._id,
   }));
+  const [productsList, setProductsList] = useState(productsWithKeys);
 
   return (
     <>
       <NavMenu />
-      <Link href="/products/create" passHref>
-        <Button type="primary" style={{ margin: '10px 5px' }}>
-          + Додати новий продукт
-        </Button>
-      </Link>
+      <ProductsPageHeader>
+        <FiltersWrapper>
+          <Input
+            placeholder="Пошук по назві продукту"
+            onChange={(e) =>
+              setProductsList(
+                productsWithKeys.filter((des) =>
+                  des.name
+                    .toLocaleLowerCase()
+                    .includes(e.target.value.toLocaleLowerCase()),
+                ),
+              )
+            }
+          />
+        </FiltersWrapper>
+        <Link href="/products/create" passHref>
+          <Button type="primary" style={{ margin: '10px 5px' }}>
+            + Додати продукт
+          </Button>
+        </Link>
+      </ProductsPageHeader>
       <TableWrapper>
-        <Table dataSource={productsWithKeys}>
+        <Table dataSource={productsList}>
           <Table.Column
             key="name"
             title="Продукт"
@@ -58,6 +75,18 @@ ProductsPage.getInitialProps = async () => {
 const TableWrapper = styled.div`
   width: 100%;
   overflow-y: auto;
+`;
+
+const FiltersWrapper = styled.div`
+  width: 180px;
+  margin-left: 10px;
+`;
+
+const ProductsPageHeader = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export default ProductsPage;

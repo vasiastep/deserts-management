@@ -21,6 +21,7 @@ const CreateDessertPage = ({ products }: CreateDessertPageProps) => {
     <>
       <NavMenu />
       <DessertsPageWrapper>
+        <Title>Новий десерт</Title>
         <DessertsForm
           allProducts={products}
           defaultValues={dessertDefaultValues}
@@ -46,6 +47,13 @@ CreateDessertPage.getInitialProps = async () => {
 
 const DessertsPageWrapper = styled.div`
   padding: 0 10px;
+`;
+
+const Title = styled.p`
+  font-size: 26px;
+  margin: 10px 0 12px;
+  text-align: center;
+  color: ${(props) => props.theme.colors.dark1};
 `;
 
 export default CreateDessertPage;
