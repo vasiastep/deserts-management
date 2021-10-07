@@ -12,7 +12,7 @@ type CreateDessertPageProps = {
 const dessertDefaultValues = {
   name: '',
   products: [],
-  utilitiesPercent: 20,
+  utilitiesPercent: 10,
   profitPercent: 0,
 };
 
