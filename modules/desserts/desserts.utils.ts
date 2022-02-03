@@ -7,11 +7,12 @@ export const getPriceForProducts = (dessert: DessertModel) =>
     0,
   );
 
-export const getPriceWithUtilities = (dessert: DessertModel) =>
-  (getPriceForProducts(dessert) * (100 + dessert.utilitiesPercent)) / 100;
+export const getUtilityPrices = (dessert: DessertModel) =>
+  (getPriceForProducts(dessert) * dessert.utilitiesPercent) / 100;
 
 export const getFullPrice = (dessert: DessertModel) =>
-  getPriceWithUtilities(dessert) * dessert.profitPercent;
+  getPriceForProducts(dessert) * dessert.profitPercent +
+  getUtilityPrices(dessert);
 
 export const getPriceForTheItemFromPortion = (dessert: DessertModel) =>
   dessert.quantityFromPortion

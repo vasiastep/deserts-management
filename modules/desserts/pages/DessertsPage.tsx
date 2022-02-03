@@ -9,7 +9,7 @@ import NavMenu from '../../../shared-components/NavMenu';
 import {
   getFullPrice,
   getPriceForTheItemFromPortion,
-  getPriceWithUtilities,
+  getUtilityPrices,
   getPriceForProducts,
 } from '../desserts.utils';
 
@@ -79,9 +79,9 @@ const DessertsPage = ({ desserts }: DessertsPageProps) => {
           />
           <Table.Column
             key="priceWithUtilities"
-            title="Cвітло,вода + продукти"
+            title="Cвітло + вода"
             render={(dessert: DessertModel) => (
-              <div>{getPriceWithUtilities(dessert).toFixed(1)} грн</div>
+              <div>{getUtilityPrices(dessert).toFixed(1)} грн</div>
             )}
           />
           <Table.Column
