@@ -15,7 +15,7 @@ type AuthFormValues = {
 
 const AuthPage = () => {
   const router = useRouter();
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<AuthFormValues>();
 
   const formHandler = (values: AuthFormValues) => {
     authenticate(values);

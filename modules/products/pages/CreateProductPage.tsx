@@ -15,7 +15,7 @@ type ProductFormValues = {
 };
 
 const CreateProductPage = () => {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<ProductFormValues>();
 
   const handleCreateProduct = async (values: ProductFormValues) => {
     const res = await fetchAPI('/products/create', 'POST', values);

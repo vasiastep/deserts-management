@@ -161,7 +161,7 @@ const DessertsForm = ({
                       labelCol={{ style: { marginBottom: -10 } }}
                       label="Продукт"
                       name={[field.name, 'productId']}
-                      fieldKey={[field.fieldKey, 'productId']}
+                      fieldKey={[field.key, 'productId']}
                       rules={[{ required: true, message: 'Потрібен продукт' }]}
                       style={{ marginBottom: 0 }}
                     >
@@ -195,7 +195,7 @@ const DessertsForm = ({
                   label="Кількість"
                   labelCol={{ style: { marginBottom: -10, marginTop: 10 } }}
                   name={[field.name, 'quantity']}
-                  fieldKey={[field.fieldKey, 'quantity']}
+                  fieldKey={[field.key, 'quantity']}
                   rules={[{ required: true, message: 'Потрібна кількість' }]}
                   style={{ marginBottom: 0 }}
                 >
