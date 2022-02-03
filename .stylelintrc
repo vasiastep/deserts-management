@@ -1,5 +1,5 @@
 {
-  "processors": ["stylelint-processor-styled-components"],
+  "customSyntax": "postcss-jsx",
   "extends": [
     "stylelint-config-recommended",
     "stylelint-config-styled-components"
