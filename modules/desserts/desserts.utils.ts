@@ -11,7 +11,7 @@ export const getCaloriesForProducts = (dessert: DessertModel) => {
 
   return dessert.products.reduce(
     (acc, i) => {
-      return acc + ((i.product as ProductModel).caloricContent || 0) * i.quantity / 100
+      return acc + ((i.product as ProductModel).caloricContent || 0) * i.quantity * 10 // quantity * 1000 / 100
     },
     0,
   );
