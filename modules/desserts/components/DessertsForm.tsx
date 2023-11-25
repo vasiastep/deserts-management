@@ -274,24 +274,26 @@ const DessertsForm = ({
         htmlType="button"
         type="primary"
         onClick={() => form.submit()}
-        style={{ marginBottom: 50, marginRight: 16 }}
+        style={{ marginRight: 16 }}
       >
         {type === 'create' ? 'Створити десерт' : 'Оновити десерт'}
       </Button>
       <Link href="/desserts">
         <Button type="dashed">Скасувати</Button>
       </Link>
-      {type === 'update' ? (
-        <Button
-          htmlType="button"
-          danger
-          type="primary"          
-          onClick={handleDeleteDessert}
-          style={{ marginBottom: 50, marginLeft: 16 }}
-        >
-          Видалити десерт
-        </Button>
-      ) : null}
+      <div>
+        {type === 'update' ? (
+          <Button
+            htmlType="button"
+            danger
+            type="primary"          
+            onClick={handleDeleteDessert}
+            style={{ marginTop: 16 }}
+          >
+            Видалити десерт
+          </Button>
+        ) : null}
+      </div>
     </Form>
   );
 };

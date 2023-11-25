@@ -87,7 +87,7 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
             />
           </InputNumberWrapper>
 
-          <div style={{ marginTop: 24, marginBottom: 50 }}>
+          <div style={{ marginTop: 24 }}>
             <Button
               type="primary"
               htmlType="submit"
@@ -98,15 +98,15 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
             <Link href="/products">
               <Button type="dashed">Скасувати</Button>
             </Link>
-            <Button
-              type="primary"
-              danger
-              onClick={handleDeleteProduct}
-              style={{ marginLeft: 20 }}
-            >
-              Видалити продукт
-            </Button>
           </div>
+          <Button
+            type="primary"
+            danger
+            onClick={handleDeleteProduct}
+            style={{ marginTop: 16 }}
+          >
+            Видалити продукт
+          </Button>
         </form>
       </Wrapper>
     </>
