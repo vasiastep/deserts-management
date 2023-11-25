@@ -30,7 +30,21 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
       return toast.error('Щось пішло не так');
     }
 
-    toast.success(`Інформацію про "${values.name}" було оновлено`);
+    toast.success(`Інформацію про "${values.name}" було оновлено`, {  });
+    router.push('/products');
+  };
+
+  const handleDeleteProduct = async () => {
+    const res = await fetchAPI(
+      `/products/update?id=${product?._id}`,
+      'DELETE',
+    );
+
+    if (!res.success) {
+      return toast.error('Не вдалось видалити продукт');
+    }
+
+    toast.success("Продукт було успішно видалено");
     router.push('/products');
   };
 
@@ -62,6 +76,17 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
             />
           </InputNumberWrapper>
 
+          <InputLabel htmlFor="caloricContent">Калорійність в 100г</InputLabel>
+          <InputNumberWrapper>
+            <Controller
+              control={control}
+              name="caloricContent"
+              defaultValue={product?.caloricContent}
+              rules={{ required: true }}
+              render={({ field }) => <InputNumber {...field} />}
+            />
+          </InputNumberWrapper>
+
           <div style={{ marginTop: 24, marginBottom: 50 }}>
             <Button
               type="primary"
@@ -73,6 +98,14 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
             <Link href="/products">
               <Button type="dashed">Скасувати</Button>
             </Link>
+            <Button
+              type="primary"
+              danger
+              onClick={handleDeleteProduct}
+              style={{ marginLeft: 20 }}
+            >
+              Видалити продукт
+            </Button>
           </div>
         </form>
       </Wrapper>

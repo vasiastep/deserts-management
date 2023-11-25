@@ -9,6 +9,7 @@ import NavMenu from '../../../shared-components/NavMenu';
 import {
   getFullPrice,
   getPriceForTheItemFromPortion,
+  getCaloriesForProducts,
   getUtilityPrices,
   getPriceForProducts,
 } from '../desserts.utils';
@@ -69,10 +70,20 @@ const DessertsPage = ({ desserts }: DessertsPageProps) => {
             )}
           />
           <Table.Column
+            key="caloricContent"
+            title="Калорійність"
+            width={40}
+            render={(dessert: DessertModel) => (
+              <div>
+                {getCaloriesForProducts(dessert).toFixed(0)} ккал
+              </div>
+            )}
+          />
+          <Table.Column
             key="fullPrice"
             title="Ціна 1шт з порції"
             render={(dessert: DessertModel) => (
-              <div style={{ width: 100 }}>
+              <div style={{ width: 40 }}>
                 {getPriceForTheItemFromPortion(dessert)}
               </div>
             )}

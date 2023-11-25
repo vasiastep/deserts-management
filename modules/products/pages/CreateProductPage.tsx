@@ -12,12 +12,15 @@ import { fetchAPI } from '../../../services/fetch.service';
 type ProductFormValues = {
   name: string;
   price: number;
+  caloricContent: number;
 };
 
 const CreateProductPage = () => {
   const { control, handleSubmit } = useForm<ProductFormValues>();
 
   const handleCreateProduct = async (values: ProductFormValues) => {
+    console.log(values);
+    
     const res = await fetchAPI('/products/create', 'POST', values);
 
     if (!res.success && res.message === 'Already exists') {
@@ -48,11 +51,24 @@ const CreateProductPage = () => {
             )}
           />
 
-          <InputLabel htmlFor="price">Ціна за одиницю товару</InputLabel>
+          <InputLabel htmlFor="price">Ціна за одиницю товару, грн</InputLabel>
           <InputNumberWrapper>
             <Controller
               control={control}
               name="price"
+              defaultValue={0}
+              rules={{ required: true }}
+              render={({ field }) => <InputNumber {...field} />}
+            />
+          </InputNumberWrapper>
+
+          <br />
+
+          <InputLabel htmlFor="caloricContent">Калорійність в 100, ккал</InputLabel>
+          <InputNumberWrapper>
+            <Controller
+              control={control}
+              name="caloricContent"
               defaultValue={0}
               rules={{ required: true }}
               render={({ field }) => <InputNumber {...field} />}

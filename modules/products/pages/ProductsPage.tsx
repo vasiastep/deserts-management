@@ -58,6 +58,11 @@ const ProductsPage = ({ products }: ProductsPageProps) => {
             title="Ціна за кг"
             render={(product: ProductModel) => `${product.price} грн`}
           />
+          <Table.Column
+            key="caloricContent"
+            title="Калорійність в 100г"
+            render={(product: ProductModel) => `${product.caloricContent ?? 0} ккал`}
+          />
         </Table>
       </TableWrapper>
     </>

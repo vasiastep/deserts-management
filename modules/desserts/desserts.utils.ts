@@ -7,6 +7,17 @@ export const getPriceForProducts = (dessert: DessertModel) =>
     0,
   );
 
+export const getCaloriesForProducts = (dessert: DessertModel) => {
+
+  return dessert.products.reduce(
+    (acc, i) => {
+      return acc + ((i.product as ProductModel).caloricContent || 0) * i.quantity / 100
+    },
+    0,
+  );
+};
+  
+
 export const getUtilityPrices = (dessert: DessertModel) =>
   (getPriceForProducts(dessert) * dessert.utilitiesPercent) / 100;
 

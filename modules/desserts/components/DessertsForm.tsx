@@ -127,6 +127,20 @@ const DessertsForm = ({
     setProductPrices(productsWithPrices);
   };
 
+  const handleDeleteDessert = async () => {
+    const result = await fetchAPI(
+      `/desserts/update?id=${router.query.id}`,
+      'DELETE',
+    );
+
+    if (!result.success) {
+      return toast.error('Не вдалось видалити десерт');
+    }
+
+    toast.success("Десерт було успішно видалено");
+    Router.push('/desserts');
+  };
+
   useEffect(() => {
     if (productPrices.length === 0) {
       calculateProductPrice();
@@ -267,6 +281,17 @@ const DessertsForm = ({
       <Link href="/desserts">
         <Button type="dashed">Скасувати</Button>
       </Link>
+      {type === 'update' ? (
+        <Button
+          htmlType="button"
+          danger
+          type="primary"          
+          onClick={handleDeleteDessert}
+          style={{ marginBottom: 50, marginLeft: 16 }}
+        >
+          Видалити десерт
+        </Button>
+      ) : null}
     </Form>
   );
 };

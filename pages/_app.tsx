@@ -70,7 +70,7 @@ class App extends BaseApp<AppProps> {
           <link
             rel="icon"
             type="image/png"
-            href="https://public-assets.develops.today/favicon.png"
+            href="https://static.vecteezy.com/system/resources/previews/010/179/006/large_2x/delicious-dessert-cake-file-free-png.png"
           />
         </Head>
 

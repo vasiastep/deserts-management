@@ -4,6 +4,7 @@ export type ProductModel = {
   _id: string;
   name: string;
   price: number;
+  caloricContent: number;
 };
 
 const ProductSchema = new mongoose.Schema(
@@ -16,6 +17,10 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    caloricContent: {
+      type: Number,
+      required: false,
+    }
   },
   { timestamps: true },
 );
