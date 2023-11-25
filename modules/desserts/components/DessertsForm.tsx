@@ -23,6 +23,7 @@ type FormProductData = {
   productId: string;
   name: string;
   price: number;
+  caloricContent: number;
 };
 
 type FormDataProducts = {
@@ -120,6 +121,7 @@ const DessertsForm = ({
               (allProducts.find((pr) => pr.productId === p.productId)?.price ||
                 0) * p.quantity || 0
             ).toFixed(2),
+            calculatedCalories: ((allProducts.find((pr) => pr.productId === p.productId)?.caloricContent || 0) * p.quantity * 10).toFixed(1) // quantity * 1000 / 100
           }
         : null,
     );
@@ -222,6 +224,11 @@ const DessertsForm = ({
                       ? productPrices[field.name].price
                       : 0}
                     &nbsp;грн
+                    &nbsp;&nbsp;
+                    {productPrices[field.name]
+                      ? productPrices[field.name].calculatedCalories
+                      : 0}
+                    &nbsp;ккал
                   </ProductPricePreview>
 
                   <Button

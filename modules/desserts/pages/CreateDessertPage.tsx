@@ -6,7 +6,7 @@ import NavMenu from '../../../shared-components/NavMenu';
 import DessertsForm from '../components/DessertsForm';
 
 type CreateDessertPageProps = {
-  products: { productId: string; name: string; price: number }[];
+  products: { productId: string; name: string; price: number; caloricContent: number; }[];
 };
 
 const dessertDefaultValues = {
@@ -39,6 +39,7 @@ CreateDessertPage.getInitialProps = async () => {
     productId: product._id,
     name: product.name,
     price: product.price,
+    caloricContent: product.caloricContent,
   }));
 
   return { products };

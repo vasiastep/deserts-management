@@ -19,8 +19,6 @@ const CreateProductPage = () => {
   const { control, handleSubmit } = useForm<ProductFormValues>();
 
   const handleCreateProduct = async (values: ProductFormValues) => {
-    console.log(values);
-    
     const res = await fetchAPI('/products/create', 'POST', values);
 
     if (!res.success && res.message === 'Already exists') {
