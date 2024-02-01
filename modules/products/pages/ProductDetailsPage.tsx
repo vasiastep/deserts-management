@@ -41,7 +41,7 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
     );
 
     if (!res.success) {
-      return toast.error('Не вдалось видалити продукт');
+      return toast.error(res.message || 'Не вдалось видалити продукт');
     }
 
     toast.success("Продукт було успішно видалено");
