@@ -50,12 +50,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         if (matchedDessert) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: `Продукт використовується в десерті: ${matchedDessert.name}`,
-            });
+          return res.status(400).json({
+            success: false,
+            message: `Продукт використовується в десерті: ${matchedDessert.name}`,
+          });
         }
 
         const deletedProduct = await Product.deleteOne({ _id: id });
