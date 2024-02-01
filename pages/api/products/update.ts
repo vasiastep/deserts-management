@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 import connectDB from '../../../api/database/connectDB';
 import Product from '../../../api/modules/products/product.model';
@@ -43,10 +43,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     case 'DELETE':
       try {
-        const matchedDessert = await Dessert.findOne({ products: { $elemMatch: { product: new mongoose.Types.ObjectId(id as string) } } });
+        const matchedDessert = await Dessert.findOne({
+          products: {
+            $elemMatch: { product: new mongoose.Types.ObjectId(id as string) },
+          },
+        });
 
         if (matchedDessert) {
-          return res.status(400).json({ success: false, message: `Продукт використовується в десерті: ${matchedDessert.name}` })
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: `Продукт використовується в десерті: ${matchedDessert.name}`,
+            });
         }
 
         const deletedProduct = await Product.deleteOne({ _id: id });

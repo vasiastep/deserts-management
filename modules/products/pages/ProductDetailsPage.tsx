@@ -30,21 +30,18 @@ const ProductDetailsPage = ({ product }: ProductDetailsPageProps) => {
       return toast.error('Щось пішло не так');
     }
 
-    toast.success(`Інформацію про "${values.name}" було оновлено`, {  });
+    toast.success(`Інформацію про "${values.name}" було оновлено`, {});
     router.push('/products');
   };
 
   const handleDeleteProduct = async () => {
-    const res = await fetchAPI(
-      `/products/update?id=${product?._id}`,
-      'DELETE',
-    );
+    const res = await fetchAPI(`/products/update?id=${product?._id}`, 'DELETE');
 
     if (!res.success) {
       return toast.error(res.message || 'Не вдалось видалити продукт');
     }
 
-    toast.success("Продукт було успішно видалено");
+    toast.success('Продукт було успішно видалено');
     router.push('/products');
   };
 
