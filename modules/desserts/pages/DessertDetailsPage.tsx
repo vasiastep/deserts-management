@@ -16,9 +16,9 @@ const DessertDetailsPage = ({ products, dessert }: DessertDetailsPageProps) => {
   const dessertDefaultValues = {
     name: dessert.name ?? '',
     products: dessert.products.map((d) => ({
-      productId: (d.product as ProductModel)._id,
+      productId: (d.product as ProductModel)?._id || "",
       quantity: d.quantity,
-      caloricContent: (d.product as ProductModel).caloricContent,
+      caloricContent: (d.product as ProductModel)?.caloricContent || 0,
     })),
     utilitiesPercent: dessert.utilitiesPercent ?? 0,
     profitPercent: dessert.profitPercent ?? 0,
